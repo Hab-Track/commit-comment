@@ -1,4 +1,4 @@
-def print_message(message):
+def print_status(message):
     def decorator(func):
         def wrapper(*args, **kwargs):
             print(f"[+] {message}")
