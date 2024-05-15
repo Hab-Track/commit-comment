@@ -22,11 +22,12 @@ def get_previous_files_dict(previous_commit):
 
 @status.print_status("comparing")
 def comment_on_diffs(repo, latest_commit, previous_commit, folder=None):
+    # sourcery skip: use-named-expression
     files = latest_commit.files
     for file in files:
         if not folder or file.filename.startswith(folder):
             diff = repo.compare(previous_commit.sha, latest_commit.sha)
-            filtered_diff_lines = [line for line in diff.diff.split('\n') if line.startswith('+') or line.startswith('-')]
+            filtered_diff_lines = [line for line in diff.split('\n') if line.startswith('+') or line.startswith('-')]
             if filtered_diff_lines:
                 comment_text = f"Modifications in {file.filename}:\n"
                 comment_text += '\n'.join(filtered_diff_lines)
