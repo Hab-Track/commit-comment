@@ -24,17 +24,15 @@ def get_previous_files_dict(previous_commit: Optional[Commit]) -> Dict[str, any]
         return {}   
 
 
+@status.print_status("comparing")
 def comment_on_diffs(repo: Repository, latest_commit: Commit, previous_commit: Optional[Commit], folder: Optional[str] = None) -> None:
     print("[DEBUG] Inside comment_on_diffs function")
-    files = latest_commit.files
-    for file in files:
+    diff = repo.compare(previous_commit.sha, latest_commit.sha)
+    print("[DEBUG] Diff retrieved")
+    for file in diff.files:
         if not folder or file.filename.startswith(folder):
             print(f"[DEBUG] Processing file: {file.filename}")
-            diff = repo.compare(previous_commit.sha, latest_commit.sha)
-            print("[DEBUG] Diff retrieved")
-            print(f"[DEBUG] Diff URL: {diff.diff_url}")
-            print(f"[DEBUG] Diff : {diff}")
-            filtered_diff_lines = [line for line in diff.diff_url.split('\n') if line.startswith('+') or line.startswith('-')]
+            filtered_diff_lines = [line for line in file.patch.split('\n') if line.startswith('+') or line.startswith('-')]
             print("[DEBUG] Diff lines filtered")
             if filtered_diff_lines:
                 comment_text = f"Modifications in {file.filename}:\n"
@@ -43,8 +41,6 @@ def comment_on_diffs(repo: Repository, latest_commit: Commit, previous_commit: O
                 print(f"Commented diff for {file.filename}")
             else:
                 print(f"No diff lines found for {file.filename}")
-        else:
-            print(f"Skipping file: {file.filename}")
 
 
 def main() -> None:
