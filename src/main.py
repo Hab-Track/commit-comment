@@ -30,10 +30,9 @@ def comment_on_diffs(repo: Repository, latest_commit: Commit, previous_commit: O
     for file in diff.files:
         if not folder or file.filename.startswith(folder):
             print(f"[DEBUG] Processing file: {file.filename}")
-            filtered_diff_lines = [line for line in file.patch.split('\n') if line.startswith('+') or line.startswith('-')]
-            if filtered_diff_lines:
+            if file.patch:
                 comment_text = f"# Modifications in {file.filename}:\n"
-                comment_text += '```' + '\n'.join(filtered_diff_lines) + '```'
+                comment_text += f"```\n{file.patch}\n```"
                 latest_commit.create_comment(body=comment_text)
                 print(f"Commented diff for {file.filename}")
             else:
