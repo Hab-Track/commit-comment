@@ -32,6 +32,8 @@ def comment_on_diffs(repo: Repository, latest_commit: Commit, previous_commit: O
             print(f"[DEBUG] Processing file: {file.filename}")
             diff = repo.compare(previous_commit.sha, latest_commit.sha)
             print("[DEBUG] Diff retrieved")
+            print(f"[DEBUG] Diff URL: {diff.diff_url}")
+            print(f"[DEBUG] Diff : {diff}")
             filtered_diff_lines = [line for line in diff.diff_url.split('\n') if line.startswith('+') or line.startswith('-')]
             print("[DEBUG] Diff lines filtered")
             if filtered_diff_lines:
