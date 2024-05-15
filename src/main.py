@@ -23,7 +23,7 @@ for file in files:
     if not folder or file.filename.startswith(folder):
         if previous_file := previous_files_dict.get(file.filename):
             diff = repo.compare(previous_commit.sha, latest_commit.sha)
-            filtered_diff_lines = [line for line in diff.diff.split('\n') if line.startswith('+') or line.startswith('-')]
+            filtered_diff_lines = [line for line in diff.split('\n') if line.startswith('+') or line.startswith('-')]
             
             comment_text = f"Modifications in {file.filename} :\n"
             comment_text += '\n'.join(filtered_diff_lines)
